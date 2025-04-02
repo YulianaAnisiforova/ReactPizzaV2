@@ -3,17 +3,17 @@ import React, {FC, useState} from 'react'
 type PizzaBlockPropsType = {
     title: string,
     price: number,
-    // imageUrl: string,
+    imageUrl: string,
 }
 
-const PizzaBlock: FC<PizzaBlockPropsType> = ({title, price}) => {
+const PizzaBlock: FC<PizzaBlockPropsType> = ({title, price, imageUrl}) => {
     const [count, setCount] = useState(0)
 
     return (
         <div className="pizza-block">
             <img
                 className="pizza-block__image"
-                src="https://cdn.dodostatic.net/static/Img/Products/019591a2f375703390252bbac9bf1cc6_1875x1875.jpeg"
+                src={imageUrl}
                 alt="Pizza"
             />
             <h4 className="pizza-block__title">{title}</h4>
