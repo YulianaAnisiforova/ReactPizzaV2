@@ -31,8 +31,7 @@ const PizzaBlock: FC<PizzaBlockPropsType> = ({title, price}) => {
             <div className="pizza-block__bottom">
                 <div className="pizza-block__price">от {price} ₽</div>
                 <button className="button button--outline button--add"
-                        onClick={() => setCount(count + 1)}
-                >
+                        onClick={() => setCount(count + 1)} >
                     <svg
                         width="12"
                         height="12"
