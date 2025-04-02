@@ -1,6 +1,10 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 
 const Sort: FC = () => {
+    const [isVisible, setIsVisible] = useState(false)
+    const [activeItem, setActiveItem] = useState('популярности')
+    const popUpList = ['популярности', 'цене', 'алфавиту']
+
     return (
         <div className="sort">
             <div className="sort__label">
@@ -17,15 +21,26 @@ const Sort: FC = () => {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span>популярности</span>
+                <span onClick={() => setIsVisible(!isVisible)}>
+                    {activeItem}
+                </span>
             </div>
-            <div className="sort__popup">
-                <ul>
-                    <li className="active">популярности</li>
-                    <li>цене</li>
-                    <li>алфавиту</li>
-                </ul>
-            </div>
+            {isVisible &&
+                <div className="sort__popup">
+                    <ul>
+                        {popUpList.map((item, i) =>
+                            <li key={i}
+                                className={activeItem === item ? 'active' : ''}
+                                onClick={() => {
+                                    setActiveItem(item)
+                                    setIsVisible(false)
+                                }}>
+                                {item}
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            }
         </div>
     )
 }
