@@ -1,7 +1,31 @@
-[
+ import pizza_1 from './../assets/img/1.jpeg'
+ import pizza_2 from './../assets/img/2.png'
+ import pizza_3 from './../assets/img/3.jpeg'
+ import pizza_4 from './../assets/img/4.jpeg'
+ import pizza_5 from './../assets/img/5.jpeg'
+ import pizza_6 from './../assets/img/6.jpeg'
+ import pizza_7 from './../assets/img/7.jpeg'
+ import pizza_8 from './../assets/img/8.jpeg'
+ import pizza_9 from './../assets/img/9.jpeg'
+ import pizza_10 from './../assets/img/10.jpeg'
+
+ export type PizzaType = {
+   id: number,
+   imageUrl: string,
+   title: string,
+   types: number[],
+   sizes: number[],
+   price: number,
+   category: number,
+   rating: number,
+ }
+
+ export const PizzaDoughType = ['тонкое', 'традиционное']
+
+export const pizzas: PizzaType[] =  [
   {
     "id": 0,
-    "imageUrl": "/assets/img/1.jpeg",
+    "imageUrl": pizza_1,
     "title": "Пепперони Фреш с перцем",
     "types": [0, 1],
     "sizes": [26, 30, 40],
@@ -11,7 +35,7 @@
   },
   {
     "id": 1,
-    "imageUrl": "/assets/img/2.png",
+    "imageUrl": pizza_2,
     "title": "Сырная",
     "types": [0],
     "sizes": [26, 40],
@@ -21,7 +45,7 @@
   },
   {
     "id": 2,
-    "imageUrl": "/assets/img/3.jpeg",
+    "imageUrl": pizza_3,
     "title": "Цыпленок барбекю",
     "types": [0],
     "sizes": [26, 40],
@@ -31,7 +55,7 @@
   },
   {
     "id": 3,
-    "imageUrl": "/assets/img/4.jpeg",
+    "imageUrl": pizza_4,
     "title": "Кисло-сладкий цыпленок",
     "types": [1],
     "sizes": [26, 30, 40],
@@ -41,7 +65,7 @@
   },
   {
     "id": 4,
-    "imageUrl": "/assets/img/5.jpeg",
+    "imageUrl": pizza_5,
     "title": "Чизбургер-пицца",
     "types": [0, 1],
     "sizes": [26, 30, 40],
@@ -51,7 +75,7 @@
   },
   {
     "id": 5,
-    "imageUrl": "/assets/img/6.jpeg",
+    "imageUrl": pizza_6,
     "title": "Крэйзи пепперони",
     "types": [0],
     "sizes": [30, 40],
@@ -61,7 +85,7 @@
   },
   {
     "id": 6,
-    "imageUrl": "/assets/img/7.jpeg",
+    "imageUrl": pizza_7,
     "title": "Пепперони",
     "types": [0, 1],
     "sizes": [26, 30, 40],
@@ -71,7 +95,7 @@
   },
   {
     "id": 7,
-    "imageUrl": "/assets/img/8.jpeg",
+    "imageUrl": pizza_8,
     "title": "Маргарита",
     "types": [0, 1],
     "sizes": [26, 30, 40],
@@ -81,7 +105,7 @@
   },
   {
     "id": 8,
-    "imageUrl": "/assets/img/9.jpeg",
+    "imageUrl": pizza_9,
     "title": "Четыре сезона",
     "types": [0, 1],
     "sizes": [26, 30, 40],
@@ -91,7 +115,7 @@
   },
   {
     "id": 9,
-    "imageUrl": "/assets/img/10.jpeg",
+    "imageUrl": pizza_10,
     "title": "Овощи и грибы",
     "types": [0, 1],
     "sizes": [26, 30, 40],

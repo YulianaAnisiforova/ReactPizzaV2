@@ -14,17 +14,13 @@ const Categories: FC = () => {
         {id: 5, name: 'Закрытые'},
     ]
 
-    const onClickCategory = (index: number) => {
-        setActiveIndex(index)
-    }
-
     return (
         <div className="categories">
             <ul>
                 {categories.map(cat =>
                     <li key={cat.id}
                         className={activeIndex === cat.id ? 'active' : ''}
-                        onClick={() => onClickCategory(cat.id)}
+                        onClick={() => setActiveIndex(cat.id)}
                     >{cat.name}</li>)}
             </ul>
         </div>
