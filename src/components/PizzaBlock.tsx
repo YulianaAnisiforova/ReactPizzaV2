@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react'
-import {PizzaDoughType, PizzaType} from '../assets/pizzas'
+import {PizzaDoughType, PizzaType} from '../types/types'
 
 const PizzaBlock: FC<PizzaType> = (props) => {
     const [activeType, setActiveType] = useState(0)

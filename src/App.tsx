@@ -4,9 +4,14 @@ import Header from './components/Header'
 import Categories from './components/Categories'
 import Sort from './components/Sort'
 import PizzaBlock from './components/PizzaBlock'
-import {pizzas} from './assets/pizzas'
+import pizzas from './assets/pizzas.json'
 
 function App() {
+    // https://67ed3c154387d9117bbcda09.mockapi.io/items
+    fetch('https://67ed3c154387d9117bbcda09.mockapi.io/items')
+        .then(response => response.json())
+        .then(json => console.log(json))
+
     return (
             <div className="wrapper">
                 <Header/>
