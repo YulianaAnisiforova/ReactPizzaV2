@@ -17,7 +17,7 @@ const PizzaBlock: FC<PizzaType> = (props) => {
             <h4 className="pizza-block__title">{props.title}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    {props.types.map(type=>
+                    {props.types.map(type =>
                         <li className={activeType === type ? 'active' : ''}
                             onClick={() => setActiveType(type)}
                             key={type}>
@@ -38,7 +38,7 @@ const PizzaBlock: FC<PizzaType> = (props) => {
             <div className="pizza-block__bottom">
                 <div className="pizza-block__price">от {props.price} ₽</div>
                 <button className="button button--outline button--add"
-                        onClick={() => setCount(count + 1)} >
+                        onClick={() => setCount(count + 1)}>
                     <svg
                         width="12"
                         height="12"
