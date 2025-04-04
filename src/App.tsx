@@ -3,20 +3,18 @@ import './scss/app.scss'
 import Header from './components/Header'
 import Categories from './components/Categories'
 import Sort from './components/Sort'
-import PizzaBlock from './components/PizzaBlock'
+import PizzaBlock from './components/PizzaBlock/PizzaBlock'
 import {PizzaType} from './types/types'
+import Skeleton from './components/PizzaBlock/Skeleton'
 
 function App() {
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
 
-    fetch('https://67ed3c154387d9117bbcda09.mockapi.io/items')
-        .then(response => response.json())
-        .then(json => {
-            setPizzas(json)
-        })
-
-    // useEffect(() => {
-    // }, []);
+    useEffect(() => {
+        fetch('https://67ed3c154387d9117bbcda09.mockapi.io/items')
+            .then(response => response.json())
+            .then(json => setPizzas(json))
+    }, [])
 
     return (
         <div className="wrapper">
@@ -29,6 +27,7 @@ function App() {
                     </div>
                     <h2 className="content__title">Все пиццы</h2>
                     <div className="content__items">
+                        <Skeleton/>
                         {pizzas.map(pizza =>
                             <PizzaBlock key={pizza.id} {...pizza}
                             />)}
