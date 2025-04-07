@@ -9,6 +9,7 @@ type SortPropsType = {
         name: string,
         sortProperty: string,
     }) => void,
+    setOrderType: (order: string) => void,
 }
 
 const Sort: FC<SortPropsType> = (props) => {
@@ -38,6 +39,10 @@ const Sort: FC<SortPropsType> = (props) => {
                 <span onClick={() => setIsVisible(!isVisible)}>
                     {props.sortType.name}
                 </span>
+                <div className={'sort__asc_desc'}>
+                    <button onClick={() => props.setOrderType('asc')}> ↑</button>
+                    <button onClick={() => props.setOrderType('desc')}> ↓</button>
+                </div>
             </div>
             {isVisible &&
                 <div className="sort__popup">
