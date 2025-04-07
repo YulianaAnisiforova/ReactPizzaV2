@@ -5,7 +5,11 @@ import Skeleton from '../components/PizzaBlock/Skeleton'
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
 
-const Home: FC = () => {
+type HomePropsType = {
+    searchValue: string,
+}
+
+const Home: FC<HomePropsType> = (props) => {
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [categoryId, setCategoryId] = useState(0)
@@ -37,7 +41,9 @@ const Home: FC = () => {
             <div className="content__items">
                 {isLoading
                     ? [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
-                    : pizzas.map(pizza =>
+                    : pizzas.filter(pizza => {
+                        return pizza.title === props.searchValue
+                    }).map(pizza =>
                         <PizzaBlock key={pizza.id} {...pizza} />)
                 }
             </div>
