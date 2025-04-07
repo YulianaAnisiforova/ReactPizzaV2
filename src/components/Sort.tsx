@@ -40,8 +40,8 @@ const Sort: FC<SortPropsType> = (props) => {
                     {props.sortType.name}
                 </span>
                 <div className={'sort__asc_desc'}>
-                    <button onClick={() => props.setOrderType('asc')}> ↑</button>
-                    <button onClick={() => props.setOrderType('desc')}> ↓</button>
+                    <button onClick={() => props.setOrderType('asc')}>↑</button>
+                    <button onClick={() => props.setOrderType('desc')}>↓</button>
                 </div>
             </div>
             {isVisible &&
