@@ -41,7 +41,16 @@ body {
 
       .categories {
         margin-bottom: 30px;
+        width: 100%;
+        overflow: scroll;
+
+        ul {
+          width: 785px;
+        }
       }
+        .categories::-webkit-scrollbar {
+          display: none;
+        }
     }
   }
 }
