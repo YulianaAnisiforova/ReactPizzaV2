@@ -1,9 +1,23 @@
 import React, {FC, useState} from 'react'
 
-const Sort: FC = () => {
+type SortPropsType = {
+    sortType: {
+        name: string,
+        sortProperty: string,
+    },
+    setSortType: (type: {
+        name: string,
+        sortProperty: string,
+    }) => void,
+}
+
+const Sort: FC<SortPropsType> = (props) => {
     const [isVisible, setIsVisible] = useState(false)
-    const [activeItem, setActiveItem] = useState('популярности')
-    const popUpList = ['популярности', 'цене', 'алфавиту']
+    const popUpList = [
+        {name: 'популярности', sortProperty: 'rating'},
+        {name: 'цене', sortProperty: 'price'},
+        {name: 'алфавиту', sortProperty: 'title'},
+    ]
 
     return (
         <div className="sort">
@@ -22,7 +36,7 @@ const Sort: FC = () => {
                 </svg>
                 <b>Сортировка по:</b>
                 <span onClick={() => setIsVisible(!isVisible)}>
-                    {activeItem}
+                    {props.sortType.name}
                 </span>
             </div>
             {isVisible &&
@@ -30,12 +44,12 @@ const Sort: FC = () => {
                     <ul>
                         {popUpList.map((item, i) =>
                             <li key={i}
-                                className={activeItem === item ? 'active' : ''}
+                                className={props.sortType.name === item.name ? 'active' : ''}
                                 onClick={() => {
-                                    setActiveItem(item)
+                                    props.setSortType(item)
                                     setIsVisible(false)
                                 }}>
-                                {item}
+                                {item.name}
                             </li>
                         )}
                     </ul>
