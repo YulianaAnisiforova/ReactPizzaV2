@@ -19,24 +19,29 @@ const Home: FC<HomePropsType> = (props) => {
 
     useEffect(() => {
         setIsLoading(true)
-        fetch('https://67ed3c154387d9117bbcda09.mockapi.io/items?category=' + categoryId
-            + '&sortBy=' + sortType.sortProperty + '&order=' + orderType
-        )
-            .then(response => response.json())
+
+        const category = `category=${categoryId}`
+        const sort = `&sortBy=${sortType.sortProperty}`
+        const order = `&order=${orderType}`
+        const search = props.searchValue ? `&search=${props.searchValue}` : ''
+
+        // fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}` //no search
+        fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${search}${sort}${order}${category}` //no categories
+        ).then(response => response.json())
             .then(json => {
                 setPizzas(json)
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
-    }, [categoryId, sortType, orderType])
+    }, [categoryId, sortType, orderType, props.searchValue])
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
-    const pizzaElements = pizzas.filter(pizza => {
-            if (pizza.title.toLowerCase().includes(props.searchValue.toLowerCase())) {
-                return true
-            }
-            return false
-        }).map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
+    const pizzaElements = pizzas
+        // .filter(pizza => {if (pizza.title.toLowerCase().includes(props.searchValue.toLowerCase())) {
+        //     return true
+        // }
+        // return false})
+        .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
     return (
         <div className="container">
