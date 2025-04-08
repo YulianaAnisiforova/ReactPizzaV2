@@ -1,16 +1,21 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {createContext, FC, useContext, useEffect, useState} from 'react'
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
 import Pagination from '../pagination/Pagination'
+import {AppContext} from '../App'
 
-type HomePropsType = {
-    searchValue: string,
+type HomeContextType = {
+    setCurrentPage: (page: number) => void,
 }
 
-const Home: FC<HomePropsType> = (props) => {
+export const HomeContext = createContext({} as HomeContextType)
+
+const Home: FC = () => {
+    const {searchValue} = useContext(AppContext)
+
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [categoryId, setCategoryId] = useState(0)
@@ -25,7 +30,7 @@ const Home: FC<HomePropsType> = (props) => {
         const category = `&category=${categoryId}`
         const sort = `&sortBy=${sortType.sortProperty}`
         const order = `&order=${orderType}`
-        const search = props.searchValue ? `&search=${props.searchValue}` : ''
+        const search = searchValue ? `&search=${searchValue}` : ''
 
         // fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}` //no search
         fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?page=${currentPage}&limit=4${search}
@@ -38,7 +43,7 @@ const Home: FC<HomePropsType> = (props) => {
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
-    }, [categoryId, sortType, orderType, props.searchValue, currentPage])
+    }, [categoryId, sortType, orderType, searchValue, currentPage])
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
@@ -50,16 +55,21 @@ const Home: FC<HomePropsType> = (props) => {
 
     return (
         <div className="container">
-            <div className="content__top">
-                <Categories categoryId={categoryId} setCategoryId={(id) => setCategoryId(id)}/>
-                <Sort sortType={sortType} setSortType={(sortType) => setSortType(sortType)}
-                      setOrderType={(order) => setOrderType(order)}/>
-            </div>
-            <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-                {isLoading ? skeletonElements : pizzaElements}
-            </div>
-            <Pagination setCurrentPage={(page) => setCurrentPage(page)} />
+            <HomeContext value={{
+                setCurrentPage,
+            }}>
+
+                <div className="content__top">
+                    <Categories categoryId={categoryId} setCategoryId={(id) => setCategoryId(id)}/>
+                    <Sort sortType={sortType} setSortType={(sortType) => setSortType(sortType)}
+                          setOrderType={(order) => setOrderType(order)}/>
+                </div>
+                <h2 className="content__title">Все пиццы</h2>
+                <div className="content__items">
+                    {isLoading ? skeletonElements : pizzaElements}
+                </div>
+                <Pagination />
+            </HomeContext>
         </div>
     )
 }

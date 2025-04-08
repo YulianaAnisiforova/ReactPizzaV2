@@ -1,12 +1,11 @@
-import React, {FC} from 'react'
+import React, {FC, useContext} from 'react'
 import ReactPaginate from 'react-paginate'
 import style from './Pagination.module.scss'
+import {HomeContext} from '../pages/Home'
 
-type PaginationPropsType = {
-    setCurrentPage: (page: number) => void,
-}
+const Pagination: FC = () => {
+    const {setCurrentPage} = useContext(HomeContext)
 
-const Pagination: FC<PaginationPropsType> = (props) => {
     return (
         <>
             <ReactPaginate className={style.paginate}
@@ -16,7 +15,7 @@ const Pagination: FC<PaginationPropsType> = (props) => {
                            pageRangeDisplayed={8}
                            pageCount={3}
                            renderOnZeroPageCount={null}
-                           onPageChange={(event) => props.setCurrentPage(event.selected + 1)}
+                           onPageChange={(event) => setCurrentPage(event.selected + 1)}
             />
         </>
     )
