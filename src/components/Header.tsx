@@ -3,12 +3,7 @@ import logo from '../assets/img/pizza-logo.svg'
 import {Link} from 'react-router-dom'
 import Search from './Search/Search'
 
-type HeaderPropsType = {
-    searchValue: string,
-    setSearchValue: (value: string) => void,
-}
-
-const Header: FC<HeaderPropsType> = (props) => {
+const Header: FC = () => {
     return (
         <div className="header">
             <div className="container">
@@ -22,7 +17,7 @@ const Header: FC<HeaderPropsType> = (props) => {
                     </div>
                 </Link>
 
-                <Search searchValue={props.searchValue} setSearchValue={props.setSearchValue} />
+                <Search />
 
                 <div className="header__cart">
                     <Link to="/cart" className="button button--cart">
