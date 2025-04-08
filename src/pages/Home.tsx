@@ -30,22 +30,24 @@ const Home: FC<HomePropsType> = (props) => {
         window.scrollTo(0, 0)
     }, [categoryId, sortType, orderType])
 
+    const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
+    const pizzaElements = pizzas.filter(pizza => {
+            if (pizza.title.toLowerCase().includes(props.searchValue.toLowerCase())) {
+                return true
+            }
+            return false
+        }).map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
+
     return (
         <div className="container">
             <div className="content__top">
                 <Categories categoryId={categoryId} setCategoryId={(id) => setCategoryId(id)}/>
                 <Sort sortType={sortType} setSortType={(sortType) => setSortType(sortType)}
-                      setOrderType={(order) => setOrderType(order)} />
+                      setOrderType={(order) => setOrderType(order)}/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {isLoading
-                    ? [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
-                    : pizzas.filter(pizza => {
-                        return pizza.title === props.searchValue
-                    }).map(pizza =>
-                        <PizzaBlock key={pizza.id} {...pizza} />)
-                }
+                { isLoading ? skeletonElements : pizzaElements }
             </div>
         </div>
     )
