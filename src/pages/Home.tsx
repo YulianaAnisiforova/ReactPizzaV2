@@ -4,11 +4,10 @@ import Sort from '../components/Sort'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
-import Pagination from '../pagination/Pagination'
 import {AppContext} from '../App'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../redux/store'
-import {setCategoryId} from '../redux/slices/filterSlice'
+import {setCategoryId, setOrderType, setSortType} from '../redux/slices/filterSlice'
 
 type HomeContextType = {
     setCurrentPage: (page: number) => void,
@@ -18,16 +17,14 @@ export const HomeContext = createContext({} as HomeContextType)
 
 const Home: FC = () => {
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
+    const sortType = useSelector((state: RootState) => state.filter.sortType)
+    const orderType = useSelector((state: RootState) => state.filter.orderType)
     const dispatch = useDispatch<AppDispatch>()
 
     const {searchValue} = useContext(AppContext)
 
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    // const [categoryId, setCategoryId] = useState(0)
-    const [sortType, setSortType] =
-        useState({name: 'популярности', sortProperty: 'rating'})
-    const [orderType, setOrderType] = useState('asc')
     const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(() => {
@@ -67,8 +64,8 @@ const Home: FC = () => {
                     />
 
                     <Sort sortType={sortType}
-                          setSortType={(sortType) => setSortType(sortType)}
-                          setOrderType={(order) => setOrderType(order)}
+                          setSortType={(sortType) => dispatch(setSortType(sortType))}
+                          setOrderType={(order) => dispatch(setOrderType(order))}
                     />
 
                 </div>
@@ -76,7 +73,6 @@ const Home: FC = () => {
                 <div className="content__items">
                     {isLoading ? skeletonElements : pizzaElements}
                 </div>
-                {/*<Pagination />*/}
             </HomeContext>
         </div>
     )

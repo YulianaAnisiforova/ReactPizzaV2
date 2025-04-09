@@ -4,11 +4,13 @@ import type {PayloadAction} from '@reduxjs/toolkit'
 export interface FilterState {
     categoryId: number,
     sortType: { name: string, sortProperty: string },
+    orderType: string,
 }
 
 const initialState: FilterState = {
     categoryId: 0,
     sortType: {name: 'популярности', sortProperty: 'rating'},
+    orderType: 'asc',
 }
 
 const filterSlice = createSlice({
@@ -18,11 +20,18 @@ const filterSlice = createSlice({
         setCategoryId(state, action: PayloadAction<number>) {
             state.categoryId = action.payload
         },
+        setSortType(state, action: PayloadAction<{name: string, sortProperty: string}>) {
+            state.sortType = action.payload
+        },
+        setOrderType(state, action: PayloadAction<string>) {
+            state.orderType = action.payload
+        }
     },
 })
 
-// Action creators are generated for each case reducer function
-export const {setCategoryId}
-    = filterSlice.actions
+export const {setCategoryId,
+        setSortType,
+        setOrderType}
+        = filterSlice.actions
 
 export default filterSlice.reducer
