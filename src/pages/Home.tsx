@@ -6,6 +6,9 @@ import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
 import Pagination from '../pagination/Pagination'
 import {AppContext} from '../App'
+import {useDispatch, useSelector} from 'react-redux'
+import {AppDispatch, RootState} from '../redux/store'
+import {setCategoryId} from '../redux/slices/filterSlice'
 
 type HomeContextType = {
     setCurrentPage: (page: number) => void,
@@ -14,11 +17,14 @@ type HomeContextType = {
 export const HomeContext = createContext({} as HomeContextType)
 
 const Home: FC = () => {
+    const categoryId = useSelector((state: RootState) => state.filter.categoryId)
+    const dispatch = useDispatch<AppDispatch>()
+
     const {searchValue} = useContext(AppContext)
 
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [categoryId, setCategoryId] = useState(0)
+    // const [categoryId, setCategoryId] = useState(0)
     const [sortType, setSortType] =
         useState({name: 'популярности', sortProperty: 'rating'})
     const [orderType, setOrderType] = useState('asc')
@@ -27,16 +33,12 @@ const Home: FC = () => {
     useEffect(() => {
         setIsLoading(true)
 
-        const category = `&category=${categoryId}`
+        const category = `category=${categoryId}`
         const sort = `&sortBy=${sortType.sortProperty}`
         const order = `&order=${orderType}`
-        const search = searchValue ? `&search=${searchValue}` : ''
+        // const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly on MockAPI
 
-        // fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}` //no search
-        fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?page=${currentPage}&limit=4${search}
-                                                                                     ${sort}
-                                                                                     ${order}
-                                                                                     ${category}` //no categories
+        fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}` //no search
         ).then(response => response.json())
             .then(json => {
                 setPizzas(json)
@@ -47,10 +49,10 @@ const Home: FC = () => {
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
-        // .filter(pizza => {if (pizza.title.toLowerCase().includes(props.searchValue.toLowerCase())) {
-        //     return true
-        // }
-        // return false})
+        .filter(pizza => {if (pizza.title.toLowerCase().includes(searchValue.toLowerCase())) {
+            return true
+        }
+        return false})
         .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
     return (
@@ -60,15 +62,21 @@ const Home: FC = () => {
             }}>
 
                 <div className="content__top">
-                    <Categories categoryId={categoryId} setCategoryId={(id) => setCategoryId(id)}/>
-                    <Sort sortType={sortType} setSortType={(sortType) => setSortType(sortType)}
-                          setOrderType={(order) => setOrderType(order)}/>
+                    <Categories categoryId={categoryId}
+                                setCategoryId={(id) => dispatch(setCategoryId(id))}
+                    />
+
+                    <Sort sortType={sortType}
+                          setSortType={(sortType) => setSortType(sortType)}
+                          setOrderType={(order) => setOrderType(order)}
+                    />
+
                 </div>
                 <h2 className="content__title">Все пиццы</h2>
                 <div className="content__items">
                     {isLoading ? skeletonElements : pizzaElements}
                 </div>
-                <Pagination />
+                {/*<Pagination />*/}
             </HomeContext>
         </div>
     )
