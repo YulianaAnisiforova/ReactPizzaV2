@@ -1,15 +1,28 @@
-import React, {FC, useRef} from 'react'
+import React, {FC, useCallback, useRef, useState} from 'react'
 import style from './Search.module.css'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppDispatch, RootState} from '../../redux/store'
+import {useDispatch} from 'react-redux'
+import {AppDispatch} from '../../redux/store'
 import {setSearchValue} from '../../redux/slices/searchSlice'
+import debounce from 'lodash.debounce'
 
 const Search: FC = () => {
-    const searchValue = useSelector((state: RootState) => state.search.searchValue)
+    const [valueForInput, setValueForInput] = useState('')
     const dispatch = useDispatch<AppDispatch>()
     const inputRef = useRef<HTMLInputElement>(null)
 
+    const updateSearchValue = useCallback(
+        debounce((valueForInput) => {
+            dispatch(setSearchValue(valueForInput))
+        }, 1000)
+    , [])
+
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValueForInput(event.currentTarget.value)
+        updateSearchValue(event.currentTarget.value)
+    }
+
     const handleClearClick = () => {
+        setValueForInput('')
         dispatch(setSearchValue(''))
         if (inputRef.current) {
             inputRef.current.focus()
@@ -21,10 +34,10 @@ const Search: FC = () => {
             <input type={'text'} placeholder={'Поиск пиццы ...'}
                    ref={inputRef}
                    className={style.input}
-                   value={searchValue}
-                   onChange={(event) => dispatch(setSearchValue(event.currentTarget.value))}
+                   value={valueForInput}
+                   onChange={(event) => handleInput(event)}
             />
-            {searchValue &&
+            {valueForInput &&
             (<svg className={style.clearIcon}
                   onClick={handleClearClick}
                   viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
