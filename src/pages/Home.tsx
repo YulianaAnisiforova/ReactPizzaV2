@@ -1,31 +1,25 @@
-import React, {createContext, FC, useContext, useEffect, useState} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
-import {AppContext} from '../App'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../redux/store'
 import {setCategoryId, setOrderType, setSortType} from '../redux/slices/filterSlice'
-
-type HomeContextType = {
-    setCurrentPage: (page: number) => void,
-}
-
-export const HomeContext = createContext({} as HomeContextType)
+import axios from 'axios'
 
 const Home: FC = () => {
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
     const sortType = useSelector((state: RootState) => state.filter.sortType)
     const orderType = useSelector((state: RootState) => state.filter.orderType)
-    const dispatch = useDispatch<AppDispatch>()
 
-    const {searchValue} = useContext(AppContext)
+    const searchValue = useSelector((state: RootState) => state.search.searchValue)
+
+    const dispatch = useDispatch<AppDispatch>()
 
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(() => {
         setIsLoading(true)
@@ -33,31 +27,25 @@ const Home: FC = () => {
         const category = `category=${categoryId}`
         const sort = `&sortBy=${sortType.sortProperty}`
         const order = `&order=${orderType}`
-        // const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly on MockAPI
+        const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly with category on MockAPI
 
-        fetch(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}` //no search
-        ).then(response => response.json())
-            .then(json => {
-                setPizzas(json)
+        axios.get(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}`)
+            .then(response => {
+                setPizzas(response.data)
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
-    }, [categoryId, sortType, orderType, searchValue, currentPage])
+
+    }, [categoryId, sortType, orderType, searchValue])
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
-        .filter(pizza => {if (pizza.title.toLowerCase().includes(searchValue.toLowerCase())) {
-            return true
-        }
-        return false})
+        // .filter(pizza => {return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
+        // })
         .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
     return (
         <div className="container">
-            <HomeContext value={{
-                setCurrentPage,
-            }}>
-
                 <div className="content__top">
                     <Categories categoryId={categoryId}
                                 setCategoryId={(id) => dispatch(setCategoryId(id))}
@@ -73,7 +61,6 @@ const Home: FC = () => {
                 <div className="content__items">
                     {isLoading ? skeletonElements : pizzaElements}
                 </div>
-            </HomeContext>
         </div>
     )
 }
