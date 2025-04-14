@@ -8,8 +8,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../redux/store'
 import {setCategoryId, setOrderType, setSortType} from '../redux/slices/filterSlice'
 import axios from 'axios'
+import qs from 'qs'
+import {useNavigate} from 'react-router-dom'
 
 const Home: FC = () => {
+    const navigate = useNavigate()
+
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
     const sortType = useSelector((state: RootState) => state.filter.sortType)
     const orderType = useSelector((state: RootState) => state.filter.orderType)
@@ -37,6 +41,15 @@ const Home: FC = () => {
         window.scrollTo(0, 0)
 
     }, [categoryId, sortType, orderType, searchValue])
+
+    useEffect(() => {
+        const queryString = qs.stringify({
+            categoryId,
+            sortProperty: sortType.sortProperty,
+            orderType,
+        })
+        navigate(`?${queryString}`)
+    }, [categoryId, sortType, orderType]);
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
