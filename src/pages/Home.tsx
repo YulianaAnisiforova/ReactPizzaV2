@@ -78,8 +78,8 @@ const Home: FC = () => {
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
-        // .filter(pizza => {return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
-        // })
+        .filter(pizza => {return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
+        })
         .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
     return (
