@@ -23,11 +23,14 @@ const Sort: FC<SortPropsType> = (props) => {
     const sortRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        document.body.addEventListener('click', (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent) => {
             if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
                 setIsVisible(false)
             }
-        })
+        }
+
+        document.body.addEventListener('click', handleClickOutside)
+        return () => document.body.removeEventListener('click', handleClickOutside)
     }, []);
 
     return (
