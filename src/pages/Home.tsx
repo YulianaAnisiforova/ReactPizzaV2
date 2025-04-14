@@ -6,7 +6,7 @@ import PizzaBlock from '../components/PizzaBlock/PizzaBlock'
 import {PizzaType} from '../types/types'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../redux/store'
-import {setCategoryId, setOrderType, setSortType} from '../redux/slices/filterSlice'
+import {setCategoryId, setFilters, setOrderType, setSortType} from '../redux/slices/filterSlice'
 import axios from 'axios'
 import qs from 'qs'
 import {useNavigate} from 'react-router-dom'
@@ -24,6 +24,14 @@ const Home: FC = () => {
 
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search. substring(1))
+
+            dispatch(setFilters({...params}))
+        }
+    }, []);
 
     useEffect(() => {
         setIsLoading(true)

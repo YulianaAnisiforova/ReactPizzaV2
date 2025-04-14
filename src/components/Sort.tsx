@@ -12,13 +12,14 @@ type SortPropsType = {
     setOrderType: (order: string) => void,
 }
 
+export const popUpList = [
+    {name: 'популярности', sortProperty: 'rating'},
+    {name: 'цене', sortProperty: 'price'},
+    {name: 'алфавиту', sortProperty: 'title'},
+]
+
 const Sort: FC<SortPropsType> = (props) => {
     const [isVisible, setIsVisible] = useState(false)
-    const popUpList = [
-        {name: 'популярности', sortProperty: 'rating'},
-        {name: 'цене', sortProperty: 'price'},
-        {name: 'алфавиту', sortProperty: 'title'},
-    ]
 
     return (
         <div className="sort">

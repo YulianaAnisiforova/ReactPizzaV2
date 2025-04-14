@@ -25,13 +25,19 @@ const filterSlice = createSlice({
         },
         setOrderType(state, action: PayloadAction<string>) {
             state.orderType = action.payload
-        }
+        },
+        setFilters(state, action: PayloadAction<any>) {
+            state.categoryId = Number(action.payload.categoryId)
+            state.sortType.sortProperty = action.payload.sortProperty
+            state.orderType = action.payload.orderType
+        },
     },
 })
 
 export const {setCategoryId,
         setSortType,
-        setOrderType}
+        setOrderType,
+        setFilters}
         = filterSlice.actions
 
 export default filterSlice.reducer
