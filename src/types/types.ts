@@ -10,3 +10,12 @@ export type PizzaType = {
 }
 
 export const PizzaDoughType = ['тонкое', 'традиционное']
+
+export type CartType = {
+    id: number,
+    title: string,
+    price: number,
+    imageUrl: string,
+    type: string,
+    size: number,
+}

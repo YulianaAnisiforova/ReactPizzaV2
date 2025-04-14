@@ -1,11 +1,29 @@
 import React, {FC, useState} from 'react'
-import {PizzaDoughType, PizzaType} from '../../types/types'
+import {CartType, PizzaDoughType, PizzaType} from '../../types/types'
+import {useDispatch} from 'react-redux'
+import {AppDispatch} from '../../redux/store'
+import {addItem} from '../../redux/slices/cartSlice'
 
 const PizzaBlock: FC<PizzaType> = (props) => {
     const [activeType, setActiveType] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
 
     const [count, setCount] = useState(0)
+
+    const dispatch = useDispatch<AppDispatch>()
+
+    const item: CartType = {
+        id: props.id,
+        title: props.title,
+        price: props.price,
+        imageUrl: props.imageUrl,
+        type: PizzaDoughType[activeType],
+        size: activeSize,
+    }
+
+    const onClickAdd = () => {
+        dispatch(addItem(item))
+    }
 
     return (
         <div className={'pizza-block-wrapper'}>
@@ -38,8 +56,8 @@ const PizzaBlock: FC<PizzaType> = (props) => {
                 </div>
                 <div className="pizza-block__bottom">
                     <div className="pizza-block__price">от {props.price} ₽</div>
-                    <button className="button button--outline button--add"
-                            onClick={() => setCount(count + 1)}>
+                    <button onClick={onClickAdd}
+                        className="button button--outline button--add">
                         <svg
                             width="12"
                             height="12"
