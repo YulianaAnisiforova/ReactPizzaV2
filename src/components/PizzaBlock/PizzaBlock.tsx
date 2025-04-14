@@ -19,6 +19,7 @@ const PizzaBlock: FC<PizzaType> = (props) => {
         imageUrl: props.imageUrl,
         type: PizzaDoughType[activeType],
         size: activeSize,
+        count: 0,
     }
 
     const onClickAdd = () => {

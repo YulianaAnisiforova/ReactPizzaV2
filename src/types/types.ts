@@ -18,4 +18,5 @@ export type CartType = {
     imageUrl: string,
     type: string,
     size: number,
+    count: number,
 }
