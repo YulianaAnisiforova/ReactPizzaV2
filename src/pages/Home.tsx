@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useEffect, useRef, useState} from 'react'
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import Skeleton from '../components/PizzaBlock/Skeleton'
@@ -13,6 +13,7 @@ import {useNavigate} from 'react-router-dom'
 
 const Home: FC = () => {
     const navigate = useNavigate()
+    const isSearch = useRef(false)
 
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
     const sortType = useSelector((state: RootState) => state.filter.sortType)
@@ -25,15 +26,7 @@ const Home: FC = () => {
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        if (window.location.search) {
-            const params = qs.parse(window.location.search. substring(1))
-
-            dispatch(setFilters({...params}))
-        }
-    }, []);
-
-    useEffect(() => {
+    const fetchPizzas = () => {
         setIsLoading(true)
 
         const category = `category=${categoryId}`
@@ -46,8 +39,26 @@ const Home: FC = () => {
                 setPizzas(response.data)
                 setIsLoading(false)
             })
-        window.scrollTo(0, 0)
+    }
 
+    useEffect(() => {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search. substring(1))
+
+            dispatch(setFilters({...params}))
+
+            isSearch.current = true
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isSearch.current) {
+            fetchPizzas()
+        }
+
+        isSearch.current = false
+
+        window.scrollTo(0, 0)
     }, [categoryId, sortType, orderType, searchValue])
 
     useEffect(() => {
