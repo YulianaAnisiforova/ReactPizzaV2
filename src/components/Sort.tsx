@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react'
+import React, {FC, useEffect, useRef, useState} from 'react'
 
 type SortPropsType = {
     sortType: {
@@ -20,9 +20,18 @@ export const popUpList = [
 
 const Sort: FC<SortPropsType> = (props) => {
     const [isVisible, setIsVisible] = useState(false)
+    const sortRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        document.body.addEventListener('click', (event: MouseEvent) => {
+            if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
+                setIsVisible(false)
+            }
+        })
+    }, []);
 
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     width="10"
