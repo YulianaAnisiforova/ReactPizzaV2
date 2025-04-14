@@ -14,6 +14,7 @@ import {useNavigate} from 'react-router-dom'
 const Home: FC = () => {
     const navigate = useNavigate()
     const isSearch = useRef(false)
+    const isMounted = useRef(false)
 
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
     const sortType = useSelector((state: RootState) => state.filter.sortType)
@@ -25,6 +26,20 @@ const Home: FC = () => {
 
     const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        if (isMounted.current) {
+            const queryString = qs.stringify({
+                categoryId,
+                sortProperty: sortType.sortProperty,
+                orderType,
+            })
+
+            navigate(`?${queryString}`)
+        }
+
+        isMounted.current = true
+    }, [categoryId, sortType, orderType]);
 
     const fetchPizzas = () => {
         setIsLoading(true)
@@ -43,7 +58,7 @@ const Home: FC = () => {
 
     useEffect(() => {
         if (window.location.search) {
-            const params = qs.parse(window.location.search. substring(1))
+            const params = qs.parse(window.location.search.substring(1))
 
             dispatch(setFilters({...params}))
 
@@ -61,15 +76,6 @@ const Home: FC = () => {
         window.scrollTo(0, 0)
     }, [categoryId, sortType, orderType, searchValue])
 
-    useEffect(() => {
-        const queryString = qs.stringify({
-            categoryId,
-            sortProperty: sortType.sortProperty,
-            orderType,
-        })
-        navigate(`?${queryString}`)
-    }, [categoryId, sortType, orderType]);
-
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
         // .filter(pizza => {return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
@@ -78,21 +84,21 @@ const Home: FC = () => {
 
     return (
         <div className="container">
-                <div className="content__top">
-                    <Categories categoryId={categoryId}
-                                setCategoryId={(id) => dispatch(setCategoryId(id))}
-                    />
+            <div className="content__top">
+                <Categories categoryId={categoryId}
+                            setCategoryId={(id) => dispatch(setCategoryId(id))}
+                />
 
-                    <Sort sortType={sortType}
-                          setSortType={(sortType) => dispatch(setSortType(sortType))}
-                          setOrderType={(order) => dispatch(setOrderType(order))}
-                    />
+                <Sort sortType={sortType}
+                      setSortType={(sortType) => dispatch(setSortType(sortType))}
+                      setOrderType={(order) => dispatch(setOrderType(order))}
+                />
 
-                </div>
-                <h2 className="content__title">Все пиццы</h2>
-                <div className="content__items">
-                    {isLoading ? skeletonElements : pizzaElements}
-                </div>
+            </div>
+            <h2 className="content__title">Все пиццы</h2>
+            <div className="content__items">
+                {isLoading ? skeletonElements : pizzaElements}
+            </div>
         </div>
     )
 }
