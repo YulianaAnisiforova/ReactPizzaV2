@@ -8,6 +8,7 @@ import {RootState} from '../redux/store'
 const Header: FC = () => {
     const totalPrice = useSelector((state: RootState) => state.cart.totalPrice)
     const items = useSelector((state: RootState) => state.cart.items)
+    const totalCount = items.reduce((sum, item) => sum + item.count, 0)
 
     return (
         <div className="header">
@@ -57,7 +58,7 @@ const Header: FC = () => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <span>{items.length}</span>
+                        <span>{totalCount}</span>
                     </Link>
                 </div>
             </div>
