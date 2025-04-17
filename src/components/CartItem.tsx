@@ -1,8 +1,7 @@
 import React, {FC} from 'react'
 import {useDispatch} from 'react-redux'
 import {AppDispatch} from '../redux/store'
-import {addItem, minusItem} from '../redux/slices/cartSlice'
-import {type} from "os";
+import {addItem, minusItem, removeItem} from '../redux/slices/cartSlice'
 
 type CartItemPropsType = {
     id: number,
@@ -22,6 +21,11 @@ const CartItem: FC<CartItemPropsType> = ({id, title , price , count , imageUrl, 
 
     const onClickMinus = () => {
         dispatch(minusItem(id))
+    }
+
+    const onClickRemove = () => {
+        if (window.confirm('Are you sure you want to delete this item?'))
+        dispatch(removeItem(id))
     }
 
     return (
@@ -71,7 +75,8 @@ const CartItem: FC<CartItemPropsType> = ({id, title , price , count , imageUrl, 
             <div className="cart__item-price">
                 <b>{price * count}</b>
             </div>
-            <div className="cart__item-remove">
+            <div className="cart__item-remove"
+                 onClick={onClickRemove}>
                 <div className="button button--outline button--circle">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
