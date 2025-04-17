@@ -1,14 +1,15 @@
 import React, {FC, useState} from 'react'
 import {CartType, PizzaDoughType, PizzaType} from '../../types/types'
-import {useDispatch} from 'react-redux'
-import {AppDispatch} from '../../redux/store'
+import {useDispatch, useSelector} from 'react-redux'
+import {AppDispatch, RootState} from '../../redux/store'
 import {addItem} from '../../redux/slices/cartSlice'
 
 const PizzaBlock: FC<PizzaType> = (props) => {
     const [activeType, setActiveType] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
 
-    const [count, setCount] = useState(0)
+    const count = useSelector((state: RootState) => state.cart.items.find(
+        obj => obj.id === props.id))
 
     const dispatch = useDispatch<AppDispatch>()
 
@@ -72,7 +73,7 @@ const PizzaBlock: FC<PizzaType> = (props) => {
                             />
                         </svg>
                         <span>Добавить</span>
-                        <i>{count}</i>
+                        <i>{count?.count || 0}</i>
                     </button>
                 </div>
             </div>
