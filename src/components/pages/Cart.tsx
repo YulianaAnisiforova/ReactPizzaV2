@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../../redux/store'
 import CartItem from './../CartItem'
 import {clearItems} from '../../redux/slices/cartSlice'
+import CartEmpty from '../CartEmpty'
 
 const Cart = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -14,6 +15,10 @@ const Cart = () => {
     const onClickClear = () => {
         if (window.confirm('Are you sure you want to clean the cart?'))
             dispatch(clearItems())
+    }
+
+    if (totalPrice === 0) {
+        return <CartEmpty />
     }
 
     return (
