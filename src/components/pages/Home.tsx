@@ -10,6 +10,7 @@ import {setCategoryId, setFilters, setOrderType, setSortType} from '../../redux/
 import axios from 'axios'
 import qs from 'qs'
 import {useNavigate} from 'react-router-dom'
+import {setItems} from '../../redux/slices/pizzaSlice'
 
 const Home: FC = () => {
     const navigate = useNavigate()
@@ -19,12 +20,11 @@ const Home: FC = () => {
     const categoryId = useSelector((state: RootState) => state.filter.categoryId)
     const sortType = useSelector((state: RootState) => state.filter.sortType)
     const orderType = useSelector((state: RootState) => state.filter.orderType)
-
+    const pizzas = useSelector((state: RootState) => state.pizza.items)
     const searchValue = useSelector((state: RootState) => state.search.searchValue)
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const [pizzas, setPizzas] = useState<PizzaType[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -52,11 +52,11 @@ const Home: FC = () => {
         try {
             const response = await axios.get<PizzaType[]>
             (`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}`)
-            setPizzas(response.data)
-            setIsLoading(false)
+            dispatch(setItems(response.data))
         } catch (error) {
-            setIsLoading(false)
             console.log('axios error', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
