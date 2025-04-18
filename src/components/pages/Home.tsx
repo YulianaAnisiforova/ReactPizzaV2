@@ -48,11 +48,11 @@ const Home: FC = () => {
         const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly with category on MockAPI
 
         // try {
-            dispatch(fetchPizzasThunk({category, sort, order, search}))
+        dispatch(fetchPizzasThunk({category, sort, order, search}))
         // } catch (error) {
         //     console.log('axios error', error)
         // } finally {
-            // setIsLoading(false)
+        // setIsLoading(false)
         // }
     }
 
@@ -98,9 +98,17 @@ const Home: FC = () => {
 
             </div>
             <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-                {status === 'loading' ? skeletonElements : pizzaElements}
-            </div>
+            {status === 'error'
+                ? <div className="content__items">
+                    <h2>Произошла ошибка 😕</h2>
+                    <p>
+                        Попробуйте перезагрузить страницу.
+                    </p>
+                </div>
+                : <div className="content__items">
+                    {status === 'loading' ? skeletonElements : pizzaElements}
+                </div>
+            }
         </div>
     )
 }
