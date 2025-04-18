@@ -41,7 +41,7 @@ const Home: FC = () => {
         isMounted.current = true
     }, [categoryId, sortType, orderType]);
 
-    const fetchPizzas = () => {
+    const fetchPizzas = async () => {
         setIsLoading(true)
 
         const category = `category=${categoryId}`
@@ -49,11 +49,15 @@ const Home: FC = () => {
         const order = `&order=${orderType}`
         const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly with category on MockAPI
 
-        axios.get(`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}`)
-            .then(response => {
-                setPizzas(response.data)
-                setIsLoading(false)
-            })
+        try {
+            const response = await axios.get<PizzaType[]>
+            (`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}`)
+            setPizzas(response.data)
+            setIsLoading(false)
+        } catch (error) {
+            setIsLoading(false)
+            console.log('axios error', error)
+        }
     }
 
     useEffect(() => {
@@ -78,7 +82,8 @@ const Home: FC = () => {
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
     const pizzaElements = pizzas
-        .filter(pizza => {return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
+        .filter(pizza => {
+            return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
         })
         .map(pizza => <PizzaBlock key={pizza.id} {...pizza} />)
 
