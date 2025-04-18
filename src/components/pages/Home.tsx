@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
+import React, {FC, useEffect, useRef} from 'react'
 import Categories from '../Categories'
 import Sort from '../Sort'
 import Skeleton from '../PizzaBlock/Skeleton'
@@ -8,7 +8,7 @@ import {AppDispatch, RootState} from '../../redux/store'
 import {setCategoryId, setFilters, setOrderType, setSortType} from '../../redux/slices/filterSlice'
 import qs from 'qs'
 import {useNavigate} from 'react-router-dom'
-import {fetchPizzasThunk, setItems} from '../../redux/slices/pizzaSlice'
+import {fetchPizzasThunk} from '../../redux/slices/pizzaSlice'
 
 const Home: FC = () => {
     const navigate = useNavigate()
@@ -24,8 +24,6 @@ const Home: FC = () => {
 
     const dispatch = useDispatch<AppDispatch>()
 
-    // const [isLoading, setIsLoading] = useState(true)
-
     useEffect(() => {
         if (isMounted.current) {
             const queryString = qs.stringify({
@@ -39,7 +37,7 @@ const Home: FC = () => {
 
         isMounted.current = true
     }, [categoryId, sortType, orderType]);
-    const fetchPizzas = async () => {
+    const fetchPizzas =  () => {
         // setIsLoading(true)
 
         const category = `category=${categoryId}`
