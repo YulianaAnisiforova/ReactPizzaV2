@@ -19,7 +19,7 @@ const PizzaBlock: FC<PizzaType> = (props) => {
         price: props.price,
         imageUrl: props.imageUrl,
         type: PizzaDoughType[activeType],
-        size: activeSize,
+        size: props.sizes[activeSize],
         count: 0,
     }
 

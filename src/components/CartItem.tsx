@@ -10,9 +10,10 @@ type CartItemPropsType = {
     count: number,
     imageUrl: string,
     type: string,
+    size: number,
 }
 
-const CartItem: FC<CartItemPropsType> = ({id, title , price , count , imageUrl, type}) => {
+const CartItem: FC<CartItemPropsType> = ({size, id, title , price , count , imageUrl, type}) => {
     const dispatch = useDispatch<AppDispatch>()
 
     const onClickPlus = () => {
@@ -39,7 +40,7 @@ const CartItem: FC<CartItemPropsType> = ({id, title , price , count , imageUrl, 
             </div>
             <div className="cart__item-info">
                 <h3>{title}</h3>
-                <p>{type}, 26 см.</p>
+                <p>{type}, {size} см.</p>
             </div>
             <div className="cart__item-count">
                 <div className="button button--outline button--circle cart__item-count-minus"
