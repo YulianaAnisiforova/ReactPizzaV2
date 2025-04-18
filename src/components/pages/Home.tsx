@@ -3,14 +3,12 @@ import Categories from '../Categories'
 import Sort from '../Sort'
 import Skeleton from '../PizzaBlock/Skeleton'
 import PizzaBlock from '../PizzaBlock/PizzaBlock'
-import {PizzaType} from '../../types/types'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppDispatch, RootState} from '../../redux/store'
 import {setCategoryId, setFilters, setOrderType, setSortType} from '../../redux/slices/filterSlice'
-import axios from 'axios'
 import qs from 'qs'
 import {useNavigate} from 'react-router-dom'
-import {setItems} from '../../redux/slices/pizzaSlice'
+import {fetchPizzasThunk, setItems} from '../../redux/slices/pizzaSlice'
 
 const Home: FC = () => {
     const navigate = useNavigate()
@@ -21,11 +19,12 @@ const Home: FC = () => {
     const sortType = useSelector((state: RootState) => state.filter.sortType)
     const orderType = useSelector((state: RootState) => state.filter.orderType)
     const pizzas = useSelector((state: RootState) => state.pizza.items)
+    const status = useSelector((state: RootState) => state.pizza.status)
     const searchValue = useSelector((state: RootState) => state.search.searchValue)
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const [isLoading, setIsLoading] = useState(true)
+    // const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         if (isMounted.current) {
@@ -40,24 +39,21 @@ const Home: FC = () => {
 
         isMounted.current = true
     }, [categoryId, sortType, orderType]);
-
     const fetchPizzas = async () => {
-        setIsLoading(true)
+        // setIsLoading(true)
 
         const category = `category=${categoryId}`
         const sort = `&sortBy=${sortType.sortProperty}`
         const order = `&order=${orderType}`
         const search = searchValue ? `&search=${searchValue}` : '' // doesn't work properly with category on MockAPI
 
-        try {
-            const response = await axios.get<PizzaType[]>
-            (`https://67ed3c154387d9117bbcda09.mockapi.io/items?${category}${sort}${order}${search}`)
-            dispatch(setItems(response.data))
-        } catch (error) {
-            console.log('axios error', error)
-        } finally {
-            setIsLoading(false)
-        }
+        // try {
+            dispatch(fetchPizzasThunk({category, sort, order, search}))
+        // } catch (error) {
+        //     console.log('axios error', error)
+        // } finally {
+            // setIsLoading(false)
+        // }
     }
 
     useEffect(() => {
@@ -81,6 +77,7 @@ const Home: FC = () => {
     }, [categoryId, sortType, orderType, searchValue])
 
     const skeletonElements = [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
+
     const pizzaElements = pizzas
         .filter(pizza => {
             return pizza.title.toLowerCase().includes(searchValue.toLowerCase());
@@ -102,7 +99,7 @@ const Home: FC = () => {
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-                {isLoading ? skeletonElements : pizzaElements}
+                {status === 'loading' ? skeletonElements : pizzaElements}
             </div>
         </div>
     )
